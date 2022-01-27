@@ -1,0 +1,62 @@
+#include <iostream>
+#include <list>//including header files
+
+using namespace std;//using namespace
+
+class Graph//graph class
+{
+    int Vertices;//vertice variable. stores Number of vertices
+    list<int>* adjLists;//adjacency list
+    bool* visited;//pointer to mark the vertice which have been visited
+
+    public://public access type
+        Graph(int vertices);
+        void addEdge(int src, int dest);
+        void DFS(int startVertex);//function declarations
+};//end of class
+
+
+Graph::Graph(int vertices)//creating graph, takes 1 arg, acts as a constructor
+{
+    Vertices = vertices;
+    adjLists = new list<int>[vertices];
+    visited = new bool[vertices];
+}//end of constructor
+
+void Graph::addEdge(int src, int dest)//Function to add edges--> Edges refer to the connectivity between vertices
+{
+    adjLists[src].push_back(dest);
+}//end of add edge method
+
+void Graph::DFS(int vertex)//performs Depth first earch
+{
+    visited[vertex] = true;//marking as visited
+    list<int> adjList = adjLists[vertex];//creating list
+
+    cout << vertex << " ";//printing
+
+    list<int>::iterator i;//itertor list-> int type
+
+    for (i = adjList.begin(); i != adjList.end(); ++i)//looping till we get the end of list
+    {
+        if (!visited[*i])//if vertex not visited
+        {
+            DFS(*i);
+        }
+    }
+}//end of function
+
+int main()//main function --? Execution starts here--> DONOT INCLUDE IN GRAPH.H FILE
+{
+    Graph graph(4);//create graph object, passing number of vertices
+
+    graph.addEdge(0, 1);
+    graph.addEdge(0, 2);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 0);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 3);//adding vertex & edge
+    graph.DFS(1);//calling DFS Function
+
+  return 0;
+}

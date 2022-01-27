@@ -1,0 +1,78 @@
+#include <iostream>
+#include<time.h>
+#include <limits.h>//including header files
+
+using namespace std;//using namesapce
+
+#define tempvertex 10
+
+int MinimumDistance(int dist[], bool sptSet[],int V)//Finds the smallest distance between vertex
+{
+    int min = INT_MAX;
+    int index;//declaring variables
+
+    for (int v = 0; v < V; v++)//looping number of vertex times
+    {
+        if (sptSet[v] == false && dist[v] <= min)//getting minimum distance
+        {
+            min = dist[v], index = v;
+        }
+    }//end of for
+
+    return index;//returning index, with minimum distance
+}
+
+void printSolution(int dist[], int V)
+{
+    cout <<"Vertex \t Distance from Source" << endl;
+    for (int i = 0; i < V; i++)
+        cout  << i << " \t\t"<<dist[i]<< endl;
+}
+
+void dijkstra(int graph[tempvertex][tempvertex], int src, int V)//function to get shortest path, takes graph & source
+{
+    int dist[V];
+    bool visited[V];
+
+    for (int i = 0; i < V; i++)
+    {
+        dist[i] = INT_MAX;
+        visited[i] = false;//marking all as non visited
+    }
+
+    dist[src] = 0;
+
+    for (int count = 0; count < V - 1; count++)//looping vertex-1 times
+    {
+        int Min = MinimumDistance(dist, visited, V);//getting minimum distance
+        visited[Min] = true;//marking as visited
+
+        for (int v = 0; v < V; v++)
+        {
+             if (!visited[v] && graph[Min][v] && dist[Min] != INT_MAX&& dist[Min] + graph[Min][v] < dist[v])
+             {
+                 dist[v] = dist[Min] + graph[Min][v];
+             }
+        }
+    }
+    printSolution(dist, V);
+}
+
+int main()//main function, execution starts here
+{
+    srand((unsigned) time(0));//for random number generation
+
+    int graph[tempvertex][tempvertex];//2d array
+
+    for(int i=0; i<tempvertex; i++)
+    {
+        for(int j=0;j<tempvertex;j++)
+        {
+            graph[i][j]= 1 + (rand() % 100);//assigning random values to array
+        }
+   }
+
+    dijkstra(graph, 0, tempvertex);//calling function
+
+    return 0;
+}

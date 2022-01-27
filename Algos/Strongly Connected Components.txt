@@ -1,0 +1,129 @@
+#include <iostream>
+#include <list>
+#include <stack>//including header files
+
+using namespace std;//using namesapce
+
+class Graph//graph class
+{
+    int vertex;//declaring variable
+    list<int> *adj;//list
+
+    void fillOrder(int s, bool visitedV[], stack<int> &Stack);
+    void DFSSCC(int s, bool visitedV[]);//Depth First Search
+
+    public://access type
+        Graph(int V);
+        void addEdge(int s, int d);
+        void printSCC();
+        Graph transpose();
+};//end of class
+
+Graph::Graph(int V)//acts as constructor
+{
+  this->vertex = V;
+  adj = new list<int>[V];
+}//end of constructor
+
+void Graph::DFSSCC(int con, bool visited[])//recursive function
+{
+    visited[con] = true;//marking as visited
+    cout << con << " ";//printing
+    list<int>::iterator i;//iterator list
+
+    for (i = adj[con].begin(); i != adj[con].end(); ++i)
+    {
+        if (!visited[*i])//if not visited
+        {
+            DFSSCC(*i, visited);//calling itself--> recurrsion
+        }
+    }
+}//end of function
+
+Graph Graph::transpose()//takes nothing, returns graph
+{
+    Graph transposegraph(vertex);//creating object
+
+    for (int j = 0; j < vertex; j++)//looping number of vertex times
+    {
+        list<int>::iterator i;//iterator
+
+        for (i = adj[j].begin(); i != adj[j].end(); ++i)
+        {
+            transposegraph.adj[*i].push_back(j);
+        }//end of inner for
+    }//end of outer for
+
+    return transposegraph;//returning graph
+}//end of function
+
+void Graph::addEdge(int s, int d)//returns nothing, takes 2 arguments, adds edges
+{
+    adj[s].push_back(d);
+}//end of function
+
+void Graph::fillOrder(int top, bool visited[], stack<int> &Stack)//takes 3 arguments, returns nothing
+{
+    visited[top] = true;//marking index "top" as visited
+    list<int>::iterator i;//iterator list
+
+    for (i = adj[top].begin(); i != adj[top].end(); ++i)
+    {
+           if (!visited[*i])
+           {
+                   fillOrder(*i, visited, Stack);
+           }
+    }
+
+  Stack.push(top);//pushing to stack
+}
+
+void Graph::printSCC()//takes nothing, returns nothing, prints result
+{
+    stack<int> Stack;//declaring stack
+    bool *visited = new bool[vertex];//dynamic array
+
+    for (int i = 0; i < vertex; i++)//looping vertex times
+    {
+        visited[i] = false;//marking all as non visited
+    }
+
+    for (int i = 0; i < vertex; i++)//looping vertex times
+    {
+        if (visited[i] == false)//if vertex not visited
+        {
+            fillOrder(i, visited, Stack);
+        }
+    }
+
+    Graph PrintGraph = transpose();//creating graph obj
+
+    for (int i = 0; i < vertex; i++)//marking all as false
+    {
+        visited[i] = false;
+    }
+
+    while (Stack.empty() == false)//if stack not empty
+    {
+        int top = Stack.top();//getting top element
+        Stack.pop();//poping
+
+        if (visited[top] == false)
+        {
+            PrintGraph.DFSSCC(top, visited);//printing
+            cout << endl;//new lie
+        }
+    }//end of while
+}//end of function
+
+int main()
+{
+    Graph graph(4);//create graph object, passing number of vertics
+    graph.addEdge(0, 1);
+    graph.addEdge(0, 2);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 0);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 3);//adding vertex & edge
+    graph.printSCC();
+}

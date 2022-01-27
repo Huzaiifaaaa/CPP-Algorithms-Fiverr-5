@@ -1,0 +1,126 @@
+#include<iostream>
+#include <bits/stdc++.h>//including header files
+
+using namespace std;//using namespace
+
+struct Edge//user defined structure, stores edge information
+{
+	int source;
+    int destination;
+    int weight;
+};
+
+struct Graph//user defined structure, stores graph information
+{
+	int Vertex;
+	int Edge;
+	struct Edge* edge;
+};
+
+struct Graph* createGraph(int V, int E)
+{
+	struct Graph* graph = new Graph;
+	graph->Vertex = V;
+	graph->Edge = E;
+	graph->edge = new Edge[E];
+	return graph;
+}
+
+void PrintBellFord(int distance[], int size)//prints result
+{
+	for (int i = 0; i < size; ++i)//looping size times
+    {
+        cout<< i <<"\t\t"<< distance[i]<<"\n";//printing
+    }
+}//end of function
+
+void BellmanFord(struct Graph* graph, int src)//BellmanFord shortest path finder
+{
+    int u=0;
+    int v=0;
+    int weight;
+	int V = graph->Vertex;
+	int E = graph->Edge;
+	int distance[V];//declaring & initializing variables
+
+	for (int i = 0; i < V; i++)
+    {
+        distance[i] = INT_MAX;
+    }
+
+	distance[src] = 0;//setting distance at src index 0
+
+	for (int i = 1; i <= V - 1; i++)
+    {
+		for (int j = 0; j < E; j++)
+        {
+			u = graph->edge[j].source;
+			v = graph->edge[j].destination;
+			weight = graph->edge[j].weight;
+
+			if (distance[u] != INT_MAX && distance[u] + weight < distance[v])
+            {
+                distance[v] = distance[u] + weight;
+            }
+		}//end of inner for loop
+	}//end of outer for loop
+
+	for (int i = 0; i < E; i++)
+    {
+		u = graph->edge[i].source;
+		v = graph->edge[i].destination;
+		weight = graph->edge[i].weight;
+
+		if (distance[u] != INT_MAX&& distance[u] + weight < distance[v]) //if negative distance
+        {
+			return;
+		}
+	}//end of for
+
+	PrintBellFord(distance, V);//printing
+	return;//return
+}//end of functin
+
+// Driver program to test above functions
+int main()
+{
+	int V = 5;
+	int E = 8;//initializing variables
+	struct Graph* graph = createGraph(V, E);//creating graph
+
+	graph->edge[0].source = 0;
+	graph->edge[0].destination = 1;
+	graph->edge[0].weight = -1;
+
+	graph->edge[1].source = 0;
+	graph->edge[1].destination = 2;
+	graph->edge[1].weight = 4;
+
+	graph->edge[2].source = 1;
+	graph->edge[2].destination = 2;
+	graph->edge[2].weight = 3;
+
+	graph->edge[3].source = 1;
+	graph->edge[3].destination = 3;
+	graph->edge[3].weight = 2;
+
+	graph->edge[4].source = 1;
+	graph->edge[4].destination = 4;
+	graph->edge[4].weight = 2;
+
+	graph->edge[5].source = 3;
+	graph->edge[5].destination = 2;
+	graph->edge[5].weight = 5;
+
+	graph->edge[6].source = 3;
+	graph->edge[6].destination = 1;
+	graph->edge[6].weight = 1;
+
+	graph->edge[7].source = 4;
+	graph->edge[7].destination = 3;
+	graph->edge[7].weight = -3;
+
+	BellmanFord(graph, 0);//calling function
+
+	return 0;//return
+}

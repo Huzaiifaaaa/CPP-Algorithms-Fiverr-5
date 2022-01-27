@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1642759785 source:c:\users\huzai\documents\github\cpp-algorithms-fiverr-5\cpp-algorithms\main.cpp
+	<iostream>
+	<list>
+	<stack>
+	<time.h>
+	"graph.h"
+
+1642432001 c:\users\huzai\documents\github\cpp-algorithms-fiverr-5\cpp-algorithms\prioqueue.h
+	<set>
+
+1642759820 c:\users\huzai\documents\github\cpp-algorithms-fiverr-5\cpp-algorithms\graph.h
+	<limits>
+	<list>
+	<map>
+	<utility>
+	<iostream>
+	<stack>
+	<time.h>
+	"prioqueue.h"
+

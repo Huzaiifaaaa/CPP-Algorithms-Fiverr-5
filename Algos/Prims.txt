@@ -1,0 +1,82 @@
+#include<iostream>
+#include <bits/stdc++.h>//including header files
+
+using namespace std;//using name space
+
+#define tempvertex 10
+
+int MinKey(int key[], bool mstSet[])//takes 2 arguments, returns Minimum Index
+{
+	int min = INT_MAX;
+	int index;//declaring variables
+
+	for (int v = 0; v < tempvertex; v++)//lopping number of vertex times
+    {
+        if (mstSet[v] == false && key[v] < min)//if minimum
+        {
+            min = key[v];
+            index = v;//updating minimum index
+        }
+    }
+
+	return index;//returning index
+}//end of function
+
+void printMST(int parent[], int graph[tempvertex][tempvertex])//takes 2 arguments, prints the result
+{
+	for (int i = 1; i < tempvertex; i++)//looping vertex times
+    {
+        cout<<parent[i]<<" - "<<i<<" \t"<<graph[i][parent[i]]<<" \n";
+    }
+}//end of function
+
+void primMST(int graph[tempvertex][tempvertex])//Minimum Spanning tree function
+{
+	int parent[tempvertex];
+	int key[tempvertex];
+	bool visited[tempvertex];
+
+	for (int i = 0; i < tempvertex; i++)//looping vertex times
+    {
+        key[i] = INT_MAX;
+        visited[i] = false;//marking all as false
+    }
+
+	key[0] = 0;
+	parent[0] = -1;
+
+	for (int count = 0; count < tempvertex - 1; count++)
+	{
+		int u = MinKey(key, visited);
+		visited[u] = true;
+
+		for (int v = 0; v < tempvertex; v++)
+        {
+            if (graph[u][v] && visited[v] == false && graph[u][v] < key[v])
+            {
+                parent[v] = u, key[v] = graph[u][v];
+            }
+        }
+	}
+
+	printMST(parent, graph);//printing
+}//end of function
+
+int main()//main function, execution starts here
+{
+    srand((unsigned) time(0));//for random number generation
+
+    int graph[tempvertex][tempvertex];
+
+    for(int i=0; i<tempvertex; i++)
+    {
+        for(int j=0;j<tempvertex;j++)
+        {
+            graph[i][j]= 1 + (rand() % 100);//assigning random values to array
+        }
+    }
+
+	primMST(graph);
+
+	return 0;
+}

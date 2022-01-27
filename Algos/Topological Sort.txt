@@ -1,0 +1,89 @@
+#include <iostream>
+#include <list>
+#include <stack>
+
+using namespace std;
+
+class TopoGraph
+{
+	int Vertices;//declaring variables
+	list<int>* adj;//adjacency list
+
+	void topologicalSortUtil(int v, bool visited[],stack<int>& Stack);
+
+    public://access tpye
+        TopoGraph(int Vertices);//constructor
+        void addEdge(int v, int w);//adds edge
+        void topologicalSort();
+};
+
+TopoGraph::TopoGraph(int V)//constructor
+{
+	this->Vertices = V;
+	adj = new list<int>[V];
+}//end of constructor
+
+void TopoGraph::addEdge(int v, int w)//add edge to graph
+{
+	adj[v].push_back(w);//pushing to graph
+}//end of function
+
+void TopoGraph::topologicalSortUtil(int vertex, bool visited[],stack<int>& Stack)
+{
+	visited[vertex] = true;//marking verte as visited
+	list<int>::iterator i;//iterator list
+
+	for (i = adj[vertex].begin(); i != adj[vertex].end(); ++i)//looping
+    {
+        if (!visited[*i])//not visited
+        {
+            topologicalSortUtil(*i, visited, Stack);//recurrsion
+        }
+    }
+
+	Stack.push(vertex);//pushing to stack
+}
+
+void TopoGraph::topologicalSort()
+{
+	stack<int> Stack;//creating stack
+
+	bool* visited = new bool[Vertices];//array to mark visted vertex
+	
+	for (int i = 0; i < Vertices; i++)//looping Vertex times
+    {
+        visited[i] = false;///marking all vertex as non visited
+    }
+		
+	for (int i = 0; i < Vertices; i++)//looping Vertex times
+    {
+        if (visited[i] == false)//if vertex not visited
+        {
+            topologicalSortUtil(i, visited, Stack);
+        }
+    }
+    
+
+	while (Stack.empty() == false)
+    {
+		cout << Stack.top() << " ";//printing result
+		Stack.pop();//popping from stack
+	}
+}
+
+
+int main()
+{
+
+	TopoGraph g(6);
+	g.addEdge(5, 2);
+	g.addEdge(5, 0);
+	g.addEdge(4, 0);
+	g.addEdge(4, 1);
+	g.addEdge(2, 3);
+	g.addEdge(3, 1);
+
+	g.topologicalSort();
+
+	return 0;
+}

@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <list>//including header files
 #include <stack>
@@ -10,8 +9,7 @@ using namespace std;//using namespace
 
 int main()//main function --? Execution starts here--> DONOT INCLUDE IN GRAPH.H FILE
 {
-
- BFSGraph graphBFS(4);//create graph object, passing number of vertices
+    BFSGraph graphBFS(4);//create graph object, passing number of vertices
     graphBFS.addEdge(0, 1);
     graphBFS.addEdge(0, 2);
     graphBFS.addEdge(1, 2);
@@ -34,5 +32,6 @@ int main()//main function --? Execution starts here--> DONOT INCLUDE IN GRAPH.H 
     bellmanFord();
     cout<<"\n\n";
     dijk();
+
     return 0;
 }
